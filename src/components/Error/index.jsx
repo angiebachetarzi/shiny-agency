@@ -1,8 +1,13 @@
-const Error = () => {
+import errorImg from '../../assets/404.svg'
+import { WrapperColumn } from '../../utils/style/Wrapper'
+
+function Error() {
   return (
-    <div>
-      <h1>Oops 🙈 This page doesn’t exist</h1>
-    </div>
+    <WrapperColumn>
+      <h1>Oops...</h1>
+      <img src={errorImg} alt="error" />
+      <h1>It looks like the page you're after doesn't exist</h1>
+    </WrapperColumn>
   )
 }
 

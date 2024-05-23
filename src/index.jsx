@@ -7,6 +7,13 @@ import Header from './components/Header'
 import Error from './components/Error'
 import Results from './pages/Results'
 import Freelancers from './pages/Freelancers'
+import { createGlobalStyle } from 'styled-components'
+
+const GlobalStyle = createGlobalStyle`
+   div {
+      font-family: 'Trebuchet MS', Helvetica, sans-serif;
+   }
+`
 
 const router = createBrowserRouter([
   {
@@ -17,28 +24,68 @@ const router = createBrowserRouter([
         <Home />
       </>
     ),
-    errorElement: <Error />,
+    errorElement: (
+      <>
+        {' '}
+        <Header />
+        <Error />
+      </>
+    ),
   },
   {
     path: 'survey/:qNumParam',
-    element: <Survey />,
-    errorElement: <Error />,
+    element: (
+      <>
+        <Header />
+        <Survey />
+      </>
+    ),
+    errorElement: (
+      <>
+        {' '}
+        <Header />
+        <Error />
+      </>
+    ),
   },
   {
     path: 'results',
-    element: <Results />,
-    errorElement: <Error />,
+    element: (
+      <>
+        <Header />
+        <Results />
+      </>
+    ),
+    errorElement: (
+      <>
+        {' '}
+        <Header />
+        <Error />
+      </>
+    ),
   },
   {
     path: 'freelancers',
-    element: <Freelancers />,
-    errorElement: <Error />,
+    element: (
+      <>
+        <Header />
+        <Freelancers />
+      </>
+    ),
+    errorElement: (
+      <>
+        {' '}
+        <Header />
+        <Error />
+      </>
+    ),
   },
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
+    <GlobalStyle />
     <RouterProvider router={router} />
   </React.StrictMode>,
 )
