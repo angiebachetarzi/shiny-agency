@@ -7,85 +7,49 @@ import Header from './components/Header'
 import Error from './components/Error'
 import Results from './pages/Results'
 import Freelancers from './pages/Freelancers'
-import { createGlobalStyle } from 'styled-components'
+import Footer from './components/Footer'
+import { SurveyProvider, ThemeProvider } from './utils/context'
+import GlobalStyle from './utils/style/GlobalStyle'
 
-const GlobalStyle = createGlobalStyle`
-   div {
-      font-family: 'Trebuchet MS', Helvetica, sans-serif;
-   }
-`
+const headerAndElement = (element) => (
+  <>
+    <Header />
+    {element}
+  </>
+)
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <Header />
-        <Home />
-      </>
-    ),
-    errorElement: (
-      <>
-        {' '}
-        <Header />
-        <Error />
-      </>
-    ),
+    element: headerAndElement(<Home />),
+    errorElement: headerAndElement(<Error />),
   },
   {
     path: 'survey/:qNumParam',
-    element: (
-      <>
-        <Header />
-        <Survey />
-      </>
-    ),
-    errorElement: (
-      <>
-        {' '}
-        <Header />
-        <Error />
-      </>
-    ),
+    element: headerAndElement(<Survey />),
+    errorElement: headerAndElement(<Error />),
   },
   {
     path: 'results',
-    element: (
-      <>
-        <Header />
-        <Results />
-      </>
-    ),
-    errorElement: (
-      <>
-        {' '}
-        <Header />
-        <Error />
-      </>
-    ),
+    element: headerAndElement(<Results />),
+    errorElement: headerAndElement(<Error />),
   },
   {
     path: 'freelancers',
-    element: (
-      <>
-        <Header />
-        <Freelancers />
-      </>
-    ),
-    errorElement: (
-      <>
-        {' '}
-        <Header />
-        <Error />
-      </>
-    ),
+    element: headerAndElement(<Freelancers />),
+    errorElement: headerAndElement(<Error />),
   },
 ])
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <GlobalStyle />
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <SurveyProvider>
+        <GlobalStyle />
+        <RouterProvider router={router} />
+        <Footer />
+      </SurveyProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 )
