@@ -1,10 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
 import { SurveyContext } from '../../utils/context'
+import { useFetch } from '../../utils/hooks'
 
 const SurveyContainer = styled.div`
   display: flex;
@@ -60,26 +61,10 @@ const Survey = () => {
   const { qNumParam } = useParams()
   const [questionNumber, setQuestionNumber] = useState(qNumParam)
   const questionNumberInt = parseInt(questionNumber)
-  const [surveyQuestions, setSurveyQuestions] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const { data, loading, error } = useFetch(`http://localhost:8000/survey`)
+
+  const { surveyData } = data
   const { answers, saveAnswers } = useContext(SurveyContext)
-  useEffect(() => {
-    setLoading(true)
-    const fetchData = async () => {
-      try {
-        const rawData = await fetch(`http://localhost:8000/survey`)
-        const { surveyData } = await rawData.json()
-        setSurveyQuestions(surveyData)
-      } catch (err) {
-        console.log(err)
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
 
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer })
@@ -95,7 +80,9 @@ const Survey = () => {
       {loading ? (
         <Loader />
       ) : (
-        <QuestionContent>{surveyQuestions[questionNumber]}   </QuestionContent>
+        <QuestionContent>
+          {surveyData && surveyData[questionNumber]}
+        </QuestionContent>
       )}
       <ReplyWrapper>
         <ReplyBox
@@ -122,7 +109,7 @@ const Survey = () => {
             Back
           </Link>
         )}
-        {surveyQuestions[questionNumberInt + 1] ? (
+        {surveyData && surveyData[questionNumberInt + 1] ? (
           <Link
             to={`/survey/${questionNumberInt + 1}`}
             onClick={() => {

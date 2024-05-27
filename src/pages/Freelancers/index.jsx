@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
 import Card from '../../components/Card'
 import styled from 'styled-components'
 import { Loader } from '../../utils/style/Atoms'
 import colors from '../../utils/style/colors'
+import { useFetch } from '../../utils/hooks'
 
 const CardsContainer = styled.div`
   display: grid;
   gap: 24px;
-  grid-template-rows: 350px 350px;
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   justify-items: center;
@@ -32,25 +31,10 @@ const LoaderWrapper = styled.div`
   justify-content: center;
 `
 const Freelancers = () => {
-  const [freelancers, setFreelancers] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
-  useEffect(() => {
-    setLoading(true)
-    const fetchData = async () => {
-      try {
-        const rawData = await fetch(`http://localhost:8000/freelances`)
-        const { freelancersList } = await rawData.json()
-        setFreelancers(freelancersList)
-      } catch (err) {
-        console.log(err)
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
+  const { data, loading, error } = useFetch(`http://localhost:8000/freelances`)
+
+  const { freelancersList } = data
+
   if (error) {
     return <span> An error occured while fetching the data</span>
   }
@@ -66,14 +50,15 @@ const Freelancers = () => {
         </LoaderWrapper>
       ) : (
         <CardsContainer>
-          {freelancers.map((profile, index) => (
-            <Card
-              key={`${profile.name}-${index}`}
-              label={profile.job}
-              title={profile.name}
-              picture={profile.picture}
-            />
-          ))}
+          {freelancersList &&
+            freelancersList.map((profile, index) => (
+              <Card
+                key={`${profile.name}-${index}`}
+                label={profile.job}
+                title={profile.name}
+                picture={profile.picture}
+              />
+            ))}
         </CardsContainer>
       )}
     </div>
