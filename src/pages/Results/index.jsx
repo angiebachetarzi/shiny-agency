@@ -52,16 +52,28 @@ const LoaderWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-const Results = () => {
-  const { answers } = useContext(SurveyContext)
-  const { theme } = useTheme()
-  const answersTab = Object.keys(answers).map((key) => answers[key])
-  const queryAnswers = answersTab.reduce(
+
+export const formatJobList = (title, listLength, index) => {
+  if (index === listLength - 1) {
+    return title
+  }
+  return `${title},`
+}
+
+export const generateQueryParams = (answersObj) => {
+  const answersTab = Object.keys(answersObj).map((key) => answersObj[key])
+  const res = answersTab.reduce(
     (acc, answer, index) => acc + `a${index + 1}=${answer}&`,
     '',
   )
+  return res.slice(0, -1)
+}
+
+const Results = () => {
+  const { answers } = useContext(SurveyContext)
+  const { theme } = useTheme()
   const { data, loading, error } = useFetch(
-    `http://localhost:8000/results?${queryAnswers}`,
+    `http://localhost:8000/results?${generateQueryParams(answers)}`,
   )
   const { resultsData } = data
 
@@ -75,15 +87,14 @@ const Results = () => {
   ) : (
     <ResultsContainer theme={theme}>
       <ResultsTitle theme={theme}>
-        You require the following skills:
+        The skills you need:
         {resultsData &&
           resultsData.map((result, index) => (
             <JobTitle
               key={`result-title-${index}-${result.title}`}
               theme={theme}
             >
-              {result.title}
-              {index === resultsData.length - 1 ? '' : ','}
+              {formatJobList(result.title, resultsData.length, index)}
             </JobTitle>
           ))}
       </ResultsTitle>
