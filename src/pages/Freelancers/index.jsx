@@ -46,7 +46,7 @@ const Freelancers = () => {
       </PageSubtitle>
       {loading ? (
         <LoaderWrapper>
-          <Loader />
+          <Loader data-testid="loader" />
         </LoaderWrapper>
       ) : (
         <CardsContainer>
