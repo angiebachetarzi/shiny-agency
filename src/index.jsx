@@ -8,6 +8,7 @@ import Error from './components/Error'
 import Results from './pages/Results'
 import Freelancers from './pages/Freelancers'
 import Footer from './components/Footer'
+import Profile from './pages/Profile'
 import { SurveyProvider, ThemeProvider } from './utils/context'
 import GlobalStyle from './utils/style/GlobalStyle'
 
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
   {
     path: 'freelancers',
     element: headerAndElement(<Freelancers />),
+    errorElement: headerAndElement(<Error />),
+  },
+  {
+    path: 'profile/:id',
+    element: headerAndElement(<Profile />),
     errorElement: headerAndElement(<Error />),
   },
 ])
